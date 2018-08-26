@@ -1,0 +1,35 @@
+{% extends 'baba.html' %}
+
+
+{% block page-main %}
+    <h1>Hosts信息</h1>
+    <p><a href="/add_hosts/">添加主机</a></p>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>序号</th>
+            <th>主机ID</th>
+            <th>主机名</th>
+            <th>运行服务</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for host in data %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ host.id }}</td>
+                <td>{{ host.name }}</td>
+                <td>{% for service in host.services.all %}{{ service.name }},{% endfor %}</td>
+                <td>
+                    <a href="/config_hosts/{{ host.id }}/" class="btn btn-info">配置 </a>
+                    <a href="/delete_hosts/{{ host.id }}/" class="btn btn-danger">删除</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {{ page_html|safe }}
+
+{% endblock %}

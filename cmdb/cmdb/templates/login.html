@@ -1,0 +1,23 @@
+{% extends 'mama.html' %}
+
+{% block page-main %}
+
+    <form action="/login/" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="exampleInputEmail1"><h2>自创精简版CMD管理系统</h2></label>
+        </div>
+        <div class="form-group">
+            <label for="exampleInputEmail1">用户名: </label>
+            <input type="text" name="username" class="form-control" id="exampleInputEmail1" placeholder="用户名">
+        </div>
+        <div class="form-group">
+            <label for="exampleInputPassword1">密码: </label>
+            <input type="password" name="password" class="form-control" id="exampleInputPassword1"
+                   placeholder="密码">
+        </div>
+        <button type="submit" class="btn btn-default"><a href="">登录</a></button>
+        <button type="submit" class="btn btn-default"><a href="/register/">注册</a></button>
+    </form>
+
+{% endblock %}

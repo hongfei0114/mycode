@@ -1,0 +1,30 @@
+{% extends 'mama.html' %}
+
+{% block page-main %}
+    <h1>用户信息</h1>
+    <p><a href="/register/">注册新用户</a></p>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>序号</th>
+            <th>用户名</th>
+            <th>管理服务</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in data %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ user.name }}</td>
+                <td>{% for service in user.service_set.all %} {{ service.name }}, {% endfor %}</td>
+                <td>
+                    <a href="/reset_pass/{{ user.id }}/" class="btn btn-info">重设密码 </a>
+                    <a href="/delete_user/{{ user.id }}/" class="btn btn-danger"> 删除此用户</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
