@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/css/bootstrap-3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <form class="register-form">
+                {% csrf_token %}
+                {% for field in form_obj %}
+                    <div class="form-group">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        <span class="help-block"></span>
+                    </div>
+                {% endfor %}
+                <div class="form-group">
+                    <label for="id_avatar">头像
+                        <img src="/static/default.png" alt="" id="avatar-img" style="width: 40px;height: 40px">
+                        <input type="file" accept="image/*" id="id_avatar" class="form-control" style="display: none;">
+                    </label>
+                </div>
+                <button type="button" class="btn btn-default" id="submit-btn">注册</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+<script>
+    //    {#ajax提交注册信息 使用ajax提交 上面的button按钮不要为submit 要改成button#}
+
+
+    $('#submit-btn').click(function () {
+        var username = $('#id_username').val();
+        var password = $('#id_password').val();
+        var re_password = $('#id_re_password').val();
+        var phone = $('#id_phone').val();
+        var email = $('#id_email').val();
+        var csrfmiddlewaretoken = $('[name="csrfmiddlewaretoken"]').val();
+
+        // 因为注册功能有头像文件数据，所以要用FormData对象提交数据
+        var fd = new FormData();
+        // 文本信息添加
+        fd.append('username', $('#id_username').val());
+        fd.append('password', $('#id_password').val());
+        fd.append('re_password', $('#id_re_password').val());
+        fd.append('phone', $('#id_phone').val());
+        fd.append('email', $('#id_ email').val());
+        fd.append('csrfmiddlewaretoken', $('[name="csrfmiddlewaretoken"]').val());
+        // 头像信息添加
+        fd.append('avatar', $('id_avatar')[0].files[0])
+
+        $.ajax({
+            url: '/register/',
+            type: 'post',
+            data: fd,
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                {#console.log(res);#}
+                if (res.code === 1) {
+                    $.each(res.error, function (k, v) {
+                        $('#id_' + k).next().text(v[0]).parent().addClass('has-error')
+                    })
+                } else {
+                    // 没有错误 自动跳转到 login页面
+                    window.location.href = res.url
+                }
+            }
+        })
+    });
+
+    // 给input标签 绑定获取焦点就删除提示的动作
+    $('.register-form input').focus(function () {
+        $(this).next().text("").parent().removeClass('has-error');
+    });
+
+    $("#id_avatar").change(function () {
+        // 取到用户选中的头像文件
+        var fileObj = this.files[0];
+        // 新建一个FileReader对象，从本地磁盘加载文件数据
+        var fr = new FileReader();
+        fr.readAsDataURL(fileObj);
+        // 读取文件是需要时间的
+        fr.onload = function () {
+            // 找到头像预览的img标签，把它的src属性设置成我读取的用户选中的图片
+            $("#avatar-img").attr("src", fr.result)
+        }
+    });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+.login-box {
+    margin-top: 70px;
+}
+
+.login-error {
+    color: red;
+}
+.report-info>span{
+    margin-right: 20px;
+}
