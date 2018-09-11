@@ -20,18 +20,18 @@ from django.views.static import serve
 from django.conf import settings
 from fault_reporting import urls as fault_report_urls
 
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^login/', views.LoginView.as_view()),
     url(r'^index/', views.index),
-
     url(r'^register/', views.RegisterView.as_view()),
     url(r'^logout/', views.logout),
     # 故障总结 主页面
     url(r'fault-report/', include(fault_report_urls)),  # 以fault-report开头的路由都交给二级路由去处理
-
-
     # 用户上传的文件的对应关系
-    url(r'media/(?P<path>.*)', serve,{'document_root': settings.MEDIA_ROOT})
+    url(r'media/(?P<path>.*)', serve, {'document_root': settings.MEDIA_ROOT}),
+
+
 
 ]

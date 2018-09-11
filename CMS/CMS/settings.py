@@ -131,7 +131,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'upload')
 MEDIA_URL = '/media/'
 
 # Django终端打印SQL语句
-
 # LOGGING = {
 #     'version': 1,
 #     'disable_existing_loggers': False,
@@ -149,3 +148,6 @@ MEDIA_URL = '/media/'
 #         },
 #     }
 # }
+
+LOGIN_URL = "/login/"
+

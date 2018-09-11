@@ -123,7 +123,7 @@ class FaultDetail(models.Model):
     """
     故障详情
     """
-    content = models.TextField
+    content = models.TextField()
     fault = models.OneToOneField(to='FaultReport')
 
     def __str__(self):

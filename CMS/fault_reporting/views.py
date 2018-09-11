@@ -5,6 +5,10 @@ from fault_reporting import forms
 from django.http import JsonResponse
 from fault_reporting import models
 from django.db.models import Count
+# django支持事务操作
+from django.db import transaction
+from django.db.models import F
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
@@ -83,3 +87,60 @@ class RegisterView(views.View):
 def logout(request):
     auth.logout(request)  # request.session.flush()
     return redirect('/login/')
+
+
+@login_required  # 使用装饰器 需要在settings中指定login的自定义路径
+def info(request):
+    # 个人中心视图
+    report_list = models.FaultReport.objects.filter(user=request.user)  # 如果位登录，会报错。获取不到用户的值。需要判断
+    return render(request, 'info.html', locals())
+
+
+def report_detail(request, report_id):
+    # 故障总结详情页
+    # 根据id找故障在总结
+    report = models.FaultReport.objects.filter(id=report_id).first()
+    if not report:
+        return HttpResponse('404')
+    return render(request, 'report_detail.html', locals())
+
+
+def updown(request):
+    res = {'code': 0}
+    user_id = request.POST.get('user_id')
+    report_id = request.POST.get('report_id')
+    # is_up = request.POST.get('is_up')  # is_up永远是字符串 'true'或者'false'
+    is_up = True if request.POST.get("is_up") == 'true' else False
+    is_exist = models.UpDown.objects.filter(user_id=user_id, fault_report_id=report_id).first()
+
+    # 1.不能推荐或反对自己的文章
+    if models.FaultReport.objects.filter(user_id=user_id, id=report_id):
+        # 说明是给自己点赞/反对
+        res["code"] = 1
+        res["msg"] = "不能支持自己的文章" if is_up else "不能反对自己的文章"
+    # 2.每个人只能给一篇文章点一次
+    elif is_exist:
+        # 如果有记录说明已经点过一次了
+        res['code'] = 1
+        res["msg"] = "你已经推荐过" if is_exist.is_up else "你已经反对过"
+
+    # 创建点赞记录
+    else:
+        # 因为点赞表创建的新纪录同事还要更新故障总结表的点赞字段，涉及到事务操作
+        with transaction.atomic():
+            # 1. 创建点赞记录
+            models.UpDown.objects.create(
+                user_id=user_id,
+                fault_report_id=report_id,
+                is_up=is_up,
+            )
+            # 2. 更新对应故障总结的点赞数
+            if is_up:
+                models.FaultReport.objects.filter(id=report_id).update(up_count=F('up_count') + 1)
+
+            else:
+                models.FaultReport.objects.filter(id=report_id).update(down_cou=inF('down_count') + 1)
+
+        res['msg'] = '推荐成功' if is_up else '反对成功'
+
+    return JsonResponse(res)

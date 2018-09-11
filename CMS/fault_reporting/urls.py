@@ -15,6 +15,8 @@ urlpatterns = [
 
     # 第三版 二级路由 四合一
     url('^(lob|tag|archive)/(.*)/$', views.index),  # Sanheyi(request, 'lob', '游戏')
-
+    url(r'^info/$', views.info),
+    url(r'^report/(\d+)/$', views.report_detail),
+    url(r'^updown/$', views.updown),
     url('^$', views.index),
 ]

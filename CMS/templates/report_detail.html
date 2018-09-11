@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>故障总结详情页</title>
+    <link rel="stylesheet" href="/static/css/bootstrap-3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/plugins/report_detail.css">
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="report">
+                <h1>{{ report.title }}</h1>
+                <p>{{ report.faultdetail.content|safe }}</p>
+            </div>
+        </div>
+    </div>
+
+    {% csrf_token %}
+
+    <!--点赞开始-->
+    <div class="clearfix">
+        <div id="div_digg">
+            <div class="diggit s21">
+                <span class="diggnum" id="digg_count">{{ report.up_count }}</span>
+            </div>
+            <div class="buryit s21">
+                <span class="burynum" id="bury_count">{{ report.down_count }}</span>
+            </div>
+            <div class="clearfix"></div>
+            <div class="diggword" id="digg_tips" style="color: red;"></div>
+        </div>
+    </div>
+    <!--点赞结束-->
+
+
+
+
+</div>
+
+<script src="/static/plugins/jquery-3.3.1.min.js"></script>
+
+<script>
+    $('.s21').click(function () {
+        // 取到点赞需要的两个数据
+        var userId = {{ request.user.id }};
+        var reportId = {{ report.id }};
+        var isUp = $(this).hasClass('diggit');
+        $.ajax({
+            url: '/fault-report/updown/',
+            type: 'post',
+            data: {
+                "user_id": userId,
+                "report_id": reportId,
+                "is_up": isUp,
+                "csrfmiddlewaretoken": $('[name="csrfmiddlewaretoken"]').val()
+            },
+            success: function (res) {
+                console.log(res);
+                if (res.code === 1) {
+                    $("#digg_tips").text(res.msg);
+                }else {
+                    // 点赞记录已经创建，在页面上展示鲜果
+                    // 1. +1操作
+                    if (isUp) {
+                        // 点赞数 +1
+                        var $upEle = $("#digg_count")
+                        // $upEle.text($upEle.text() + 1);  //这种写法是字符串的拼接 需要转化成整形
+                        $upEle.text(+($upEle.text()) + 1);  //这种写法是字符串的拼接 需要转化成整形
+                    }else {
+                        // 反对数 +1
+                        var $downEle = $("#bury_count")
+                        $downEle.text(+($downEle.text()) + 1); // +号快速的int一个字符串 <==> parseInt($downEle.text())+1
+                    }
+                    // 2.
+                    $("#digg_tips").text();
+                }
+            }
+        })
+    })
+</script>
+
+
+</body>
+</html>
