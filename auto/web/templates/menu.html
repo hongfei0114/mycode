@@ -1,0 +1,36 @@
+
+{#根据配置文件，自动生成模板文件#}
+
+{% for k in obj %}
+    <div class="item">
+        <div class="title">
+            <span class="icon-wrap"><i class="fa {{ k.icon }}"></i></span> {{ k.title }}
+        </div>
+        <div class="body {{ k.class }}">
+            {% for child in k.children %}
+                {% if child.is_menu %}
+                    <a class="{{ child.class }}" href="{{ child.url }}"> {{ child.title }} </a>
+
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+{% endfor %}
+
+
+{#{% for k in obj %}#}
+{#    <div class="item">#}
+{#        <div class="title">#}
+{#            <span class="icon-wrap"><i class="fa {{ k.icon }}"></i></span> {{ k.title }}#}
+{#        </div>#}
+{#        <div class="body">#}
+{#            {% for child in k.children %}#}
+{#                {% if request.path_info == child.url %}#}
+{#                    <a class="active" href="{{ child.url }}"> {{ child.title }} </a>#}
+{#                {% else %}#}
+{#                    <a href="{{ child.url }}"> {{ child.title }} </a>#}
+{#                {% endif %}#}
+{#            {% endfor %}#}
+{#        </div>#}
+{#    </div>#}
+{#{% endfor %}#}

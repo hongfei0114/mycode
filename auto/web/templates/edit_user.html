@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+    <h1>编辑用户</h1>
+    <form method="post">
+        {% csrf_token %}
+        <p>
+            {{ form.username }} {{ form.username.errors.0 }}
+            {{ form.password }} {{ form.password.errors.0 }}
+        </p>
+
+        <input type="submit" value="提交" class="btn bg-success">
+
+    </form>
+
+{% endblock %}

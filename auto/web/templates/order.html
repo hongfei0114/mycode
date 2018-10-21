@@ -1,0 +1,32 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+
+
+    <h1>订单详情</h1>
+    <p><a class="btn btn-primary" href="/web/add_order/">添加订单</a></p>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>序号</th>
+            <th>名称</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for order in order_obj %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ order.title }}</td>
+                <td>
+                    <a href="/web/edit_order/{{ order.id }}/">编辑</a>
+                    <a href="/web/del_order/{{ order.id }}/">删除</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+{% endblock %}

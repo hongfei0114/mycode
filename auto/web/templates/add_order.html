@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+    <h1>创建订单</h1>
+    <form method="post">
+        {% csrf_token %}
+        <p>
+            {{ form.title }} {{ form.title.errors.0 }}
+        </p>
+
+        <input type="submit" value="提交" class="btn bg-success">
+
+    </form>
+
+{% endblock %}
