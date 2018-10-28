@@ -18,19 +18,6 @@ class UserInfo(models.Model):
         verbose_name_plural = verbose_name
 
 
-# 权限表
-class Permission(models.Model):
-    title = models.CharField(max_length=16, verbose_name='权限名称')
-
-    # url = models.CharField(max_length=255, verbose_name='URL')
-
-    def __str__(self):
-        return self.title
-
-    class Meta:
-        verbose_name = '权限表'
-        verbose_name_plural = verbose_name
-
 
 # 权限表
 class Order(models.Model):

@@ -35,7 +35,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'web.apps.WebConfig',
+    # 'web.apps.WebConfig',
+    'rbac.apps.RbacConfig',
 ]
 
 MIDDLEWARE = [
@@ -118,26 +119,26 @@ STATIC_URL = '/static/'
 ##############################  定义二级菜单   ##############################
 
 
-MEAU_LIST = [
-    {
-        'title': '用户管理',
-        'icon': 'fa-clipboard',
-        'class': 'hide',
-        'children': [
-            {'title': '用户列表', 'url': '/web/user/', 'is_menu': True},
-            {'title': '个人中心', 'url': '/web/index/', 'is_menu': True},
-            {'title': '添加用户', 'url': '/web/add_user/', 'is_menu': False, 'parent_index': 0},  # 通过索引0与用户列表关联
-            {'title': '编辑用户', 'url': '/web/edit_user/(\d+)/', 'is_menu': False, 'parent_index': 0},  # 通过索引0与用户列表关联
-
-        ]
-    },
-    {
-        'title': '商品管理',
-        'icon': 'fa-clipboard',
-        'class': 'hide',
-        'children': [
-            {'title': '订单管理', 'url': '/web/order/', 'is_menu': True},
-            {'title': '活动中心', 'url': '/web/center/', 'is_menu': True},
-        ]
-    },
-]
+# MEAU_LIST = [
+#     {
+#         'title': '用户管理',
+#         'icon': 'fa-clipboard',
+#         'class': 'hide',
+#         'children': [
+#             {'title': '用户列表', 'url': '/web/user/', 'is_menu': True},
+#             {'title': '个人中心', 'url': '/web/index/', 'is_menu': True},
+#             {'title': '添加用户', 'url': '/web/add_user/', 'is_menu': False, 'parent_index': 0},  # 通过索引0与用户列表关联
+#             {'title': '编辑用户', 'url': '/web/edit_user/(\d+)/', 'is_menu': False, 'parent_index': 0},  # 通过索引0与用户列表关联
+#
+#         ]
+#     },
+#     {
+#         'title': '商品管理',
+#         'icon': 'fa-clipboard',
+#         'class': 'hide',
+#         'children': [
+#             {'title': '订单管理', 'url': '/web/order/', 'is_menu': True},
+#             {'title': '活动中心', 'url': '/web/center/', 'is_menu': True},
+#         ]
+#     },
+# ]

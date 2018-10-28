@@ -17,12 +17,10 @@ class UserInfo(models.Model):
         verbose_name_plural = verbose_name
 
 
-
-
 # 角色
 class Role(models.Model):
     title = models.CharField(max_length=32, verbose_name='角色名称')
-    # 因为由角色查询对应的角色的场景多 所以把多对多设计到Role表中
+    # 因为由角色查询对应的权限的场景多 所以把多对多设计到Role表中
     permissions = models.ManyToManyField(to='Permission')
 
     def __str__(self):
@@ -31,6 +29,7 @@ class Role(models.Model):
     class Meta:
         verbose_name = '角色表'
         verbose_name_plural = verbose_name
+
 
 # 权限表
 class Permission(models.Model):
